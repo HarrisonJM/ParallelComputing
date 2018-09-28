@@ -1,0 +1,2 @@
+add_subdirectory(coursework)
+add_subdirectory(week1)

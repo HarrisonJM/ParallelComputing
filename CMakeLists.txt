@@ -6,3 +6,4 @@ set(CMAKE_CXX_FLAGS "-std=gnu++17 -std=c++17 -lpthread -ldl -Wall")
 
 add_subdirectory(coursework)
 add_subdirectory(week1)
+add_subdirectory(week2)

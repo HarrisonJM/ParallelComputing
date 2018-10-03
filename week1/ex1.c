@@ -103,13 +103,12 @@ void multiplyForRow(int* m1,
 	for(int x=0; x < m1x; ++x)
 		for(int y=0; y < m2y; ++y)
 		{
+#pragma omp parallel for			
 			for(int cn=0; cn < commonNumber; ++cn)
 			{
 				curSum+= getNumber(m1, cn, x, commonNumber) * getNumber(m2, y, cn, m2y);
-                printf("%d * %d \n", getNumber(m1, cn, x, commonNumber), getNumber(m2, y, cn, m2y));
 			}
 
-			printf("curSum: %d\n", curSum);
 			(*resultMatrix)[(x*m2y)+y] = curSum;
             curSum=0;
 		}		

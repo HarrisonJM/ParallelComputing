@@ -1,2 +1,3 @@
 add_executable(PCw3ex3
-        ex3.c)
+        ../src/fileHandling.c
+        ex3.c sudokuFileHandler.c sudokuUtility.c )

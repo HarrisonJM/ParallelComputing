@@ -75,10 +75,11 @@ void rowSolver(const int* sudokuGrid)
             newGrid = fillPuzzle(sudokuGrid);
         }
 
+        printPuzzle(newGrid);
+
     }while(!solveForRows(&newGrid));
 
     // Grid solved
-    printPuzzle(newGrid);
 }
 
 int main(void)

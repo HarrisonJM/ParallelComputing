@@ -32,7 +32,7 @@ size_t copyPuzzle(int** dest, const int* src)
     *dest = malloc(sizeOfPuzzleInBytes);
 
     // Move basic puzzle into place
-    memcpy(dest,
+    memcpy(*dest,
            src,
            sizeOfPuzzleInBytes);
 
@@ -107,4 +107,6 @@ int* fillPuzzle(const int* sudoku)
             }
         }
     }
+
+    return filledPuzzle;
 }

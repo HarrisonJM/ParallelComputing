@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
 	/* bub sort 2 */
     begin = clock();
-    bubbleSort2(&numbersToSort, maxNumbers);
+    bubbleSort2(&newBubNumbers, maxNumbers);
     end = clock();
     printNumberArrays(numbersToSort, maxNumbers);
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -91,20 +91,21 @@ int bubbleSort2(int** numbersToSort, const int maxNumbers)
         #pragma omp parallel
         #pragma omp single
         {
-            #pragma omp task
+//            #pragma omp task
             int swapped = compareEveryOtherNumber(numbersToSort,
                                                   maxNumbers,
                                                   0);
-            #pragma omp task
+//            #pragma omp task
             int otherSwapped = compareEveryOtherNumber(numbersToSort,
                                                        maxNumbers,
                                                        2);
 
-            #pragma omp taskwait
+//            #pragma omp taskwait
             masked = (swapped && swappedMask) && (otherSwapped && swappedMask);
         }
     } while(!masked);
 
+    return 0;
 }
 
 int bubbleSort(int** numbersToSort, const int maxNumbers)
@@ -229,6 +230,8 @@ int quickSort(int** numbersToSort, const int lo, const int hi)
         quickSort(numbersToSort, lo, partitionPoint-1);
         quickSort(numbersToSort, partitionPoint + 1, hi);
     }
+
+    return 0;
 }
 
 int generateNumbers(int** dest, const int len)

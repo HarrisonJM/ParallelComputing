@@ -5,7 +5,7 @@
 #include <zconf.h>
 #include "timer.h"
 
-typedef struct histoChart
+typedef struct histoChart_struct
 {
     int _min;
     int _max;
@@ -62,6 +62,7 @@ void readnumbersIn(int** numberList, int sizeOfList, const char* fileName)
 
 	while(fgets(number, 3, fp) != NULL)
 	{
+	    long numL = (int)strtol(number, &endptr, 2);
 		(*numberList)[counter] = (int)strtol(number, &endptr, 2);
 		++counter;
 	}
@@ -80,7 +81,7 @@ int getNumberOfLines(const char* fileName)
         }
     }
 
-    fclose(fp);
+//    fclose(fp);
 
     return lines;
 }
@@ -94,14 +95,19 @@ void printNumbersList(int *numbersList,
 
 int main()
 {
-    const int numberOfLines = getNumberOfLines("/home/hmarcks/src/ParallelComputing/week4/grades.txt");
-    int *numberList = malloc(numberOfLines*sizeof(int));
+    const int numberOfLines = 1 + getNumberOfLines("/home/hmarcks/src/ParallelComputing/week4/grades.txt");
+
+    char* str = malloc(20);
+    strcpy(str, "Please work!");
+    printf("%s", str);
+
+    int *numberList = calloc(1400, 4);
     readnumbersIn(&numberList,
                   numberOfLines,
         "/home/hmarcks/src/ParallelComputing/week4/grades.txt");
 
     histoChart* histogram;
-    histogram = malloc(10*sizeof(histoChart));
+    histogram = calloc(10, 12);
     initChart(&histogram);
 
     printNumbersList(numberList,
@@ -110,7 +116,7 @@ int main()
     startCount();
     for(int i = 0; i < (numberOfLines/5); ++i)
     {
-        numberCounter(5,
+        numberCounter(25,
                       numberList + (i * 5),
                       &histogram);
     }

@@ -20,7 +20,8 @@ void stopCountAndPrintWithName(const char* testing)
     end = clock();
     clock_t timeSpent = end - begin;
 
-    printf("%s Time: %f\n", testing, timeSpent);
+    printf("%s Time: %Lf\n", testing, (long double)timeSpent/CLOCKS_PER_SEC);
+    end = (long double)0;
 }
 
 void stopCountAndPrint()

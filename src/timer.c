@@ -21,7 +21,8 @@ void stopCountAndPrintWithName(const char* testing)
     clock_t timeSpent = end - begin;
 
     printf("%s Time: %Lf\n", testing, (long double)timeSpent/CLOCKS_PER_SEC);
-    end = (long double)0;
+    end = (long)0;
+    begin = (long)0;
 }
 
 void stopCountAndPrint()

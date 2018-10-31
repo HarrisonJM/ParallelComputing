@@ -215,8 +215,10 @@ int main()
 
         numberCounterThreaded(25,
                               numThread,
-                              numberSListLocal + (numThread * 25),
+                              numberSListLocal,
                               &histogram2);
+
+//        printf("threadNum: %d\n", numThread);
     }
     stopCountAndPrintWithName("Others doing (4x25)");
 

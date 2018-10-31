@@ -20,7 +20,7 @@
 
 int solveForRows(int** sudokuGrid)
 {
-    int solved = 0;
+//    int solved = 0;
 
     for(int row = 0; row < SUDOKUSIZE; ++row)
     {
@@ -42,7 +42,7 @@ int solveForRows(int** sudokuGrid)
 
 int solveForSquares(int** sudokuGrid)
 {
-
+    return 0;
 }
 
 void rowSolver(const int* sudokuGrid)
@@ -87,9 +87,9 @@ int main(void)
     // Acquire files
     srand(time(NULL));
 
-    FILE* SudokuA_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/ASudoku");
-    FILE* SudokuB_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/BSudoku");
-    FILE* SudokuC_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/CSudoku");
+//    FILE* SudokuA_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/ASudoku");
+//    FILE* SudokuB_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/BSudoku");
+//    FILE* SudokuC_fp = openSudoku("/home/hmarcks/src/ParallelComputing/week3/CSudoku");
 
 //    int *sudokuA = NULL;
 //    sudokuA = malloc(SUDOKUSIZE * sizeof(int));
@@ -108,31 +108,31 @@ int main(void)
             0,0,0,7,8,9,0,0,0,
             0,0,0,0,0,0,7,8,9
         };
-    const int sudokuB[] =
-        {
-            1,2,3,0,0,0,7,8,9,
-            9,0,0,4,5,6,0,0,1,
-            0,0,0,1,0,0,0,0,0,
-            7,8,9,0,0,0,1,2,3,
-            0,1,0,9,8,7,0,4,0,
-            0,0,0,0,0,5,0,0,0,
-            2,3,1,0,0,0,4,5,6,
-            0,4,0,2,3,4,0,0,7,
-            0,0,0,0,5,0,0,0,0
-        };
-    const int sudokuC[] =
-        {
-            1,2,3,4,5,6,7,8,9,
-            4,5,6,7,8,9,1,2,3,
-            7,8,9,1,2,3,4,5,6,
-            3,1,2,6,4,5,9,7,8,
-            6,4,5,9,7,8,3,1,2,
-            2,3,1,5,6,4,8,9,7,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,
-
-        };
+//    const int sudokuB[] =
+//        {
+//            1,2,3,0,0,0,7,8,9,
+//            9,0,0,4,5,6,0,0,1,
+//            0,0,0,1,0,0,0,0,0,
+//            7,8,9,0,0,0,1,2,3,
+//            0,1,0,9,8,7,0,4,0,
+//            0,0,0,0,0,5,0,0,0,
+//            2,3,1,0,0,0,4,5,6,
+//            0,4,0,2,3,4,0,0,7,
+//            0,0,0,0,5,0,0,0,0
+//        };
+//    const int sudokuC[] =
+//        {
+//            1,2,3,4,5,6,7,8,9,
+//            4,5,6,7,8,9,1,2,3,
+//            7,8,9,1,2,3,4,5,6,
+//            3,1,2,6,4,5,9,7,8,
+//            6,4,5,9,7,8,3,1,2,
+//            2,3,1,5,6,4,8,9,7,
+//            0,0,0,0,0,0,0,0,0,
+//            0,0,0,0,0,0,0,0,0,
+//            0,0,0,0,0,0,0,0,0,
+//
+//        };
 
 //    printPuzzle(sudokuA);
     rowSolver(sudokuA);

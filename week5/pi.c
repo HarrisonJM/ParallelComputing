@@ -3,6 +3,8 @@
 #include <omp.h>
 #include "timer.h"
 
+#define NUMTHREADS 100
+
 /* Serial Code */
 static long const num_steps = 100000;
 
@@ -42,16 +44,52 @@ double piASync()
     return (step * sumFinal);
 }
 
+double piAsync2()
+{
+    int i, nthreads;
+    double pi, sum[NUMTHREADS];
+    double step = 1.0/(double)num_steps;
+    omp_set_num_threads(NUMTHREADS);
+
+    #pragma omp parallel
+    {
+       int j, id, nthrds;
+       double x;
+       id = omp_get_thread_num();
+       nthrds = omp_get_num_threads();
+
+       if (id == 0)
+           nthreads = nthrds;
+
+       for(j = id, sum[id] = 0.0; j < num_steps; j+=nthreads)
+       {
+           x = (j+0.5) * step;
+           sum[id] += 4.0/(1.0+x*x);
+       }
+    }
+
+    for(i = 0, pi = 0.0; i < nthreads; ++i)
+        pi += sum[i] * step;
+
+    return pi;
+}
+
 int main()
 {
     startCount();
     printf("%f\n", piSerial());
-    stopCountAndPrintWithName("Serial test: ");
+    stopCountAndPrintWithName("Serial    test: ");
 
     printf("\n");
 
     startCount();
     printf("%f\n", piASync());
-    stopCountAndPrintWithName("Parallel Test: ");
+    stopCountAndPrintWithName("Parallel  Test: ");
+
+    printf("\n");
+
+    startCount();
+    printf("%f\n", piAsync2());
+    stopCountAndPrintWithName("Parallel2 Test: ");
 }
 

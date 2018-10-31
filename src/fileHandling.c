@@ -18,6 +18,8 @@ FILE* openFile(const char* fileName, const char* mode)
         printf("Failed to open file");
         exit(1);
     }
+
+    return fp;
 }
 
 int closeFile(FILE* fp)

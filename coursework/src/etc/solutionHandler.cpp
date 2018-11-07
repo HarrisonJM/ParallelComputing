@@ -33,13 +33,7 @@ SolutionHandler::SolutionHandler(const int numberofThreads
     if (numberofThreads > 0)
         tempNum = _numberOfThreads;
 
-    _readySolutions = new std::queue<std::string>[tempNum];
-}
-/*!
- * @brief Destructor
- */
-SolutionHandler::~SolutionHandler()
-{
+    _readySolutions = new std::queue<const uint8_t*>[tempNum];
 }
 /*!
  * @brief generates solutiosn based on the threadhandler
@@ -52,7 +46,7 @@ void SolutionHandler::GenUsingHandler()
     }
 }
 /*!
- * @brief Just generates a bunch of soultions
+ * @brief Just generates a bunch of solutions
  */
 void SolutionHandler::Gen()
 {
@@ -63,13 +57,13 @@ void SolutionHandler::Gen()
  * @param solverID The ID of the solver to grab a solution
  * @return A char* containing the solution
  */
-const std::string SolutionHandler::getNextSolution(const int solverID)
+const uint8_t * SolutionHandler::getNextSolution(const int solverID)
 {
     // outOfBounds
     if (solverID > _numberOfThreads)
-        return "";
+        return (uint8_t*)"0000000000000000";
 
-    const char *solution = _readySolutions[solverID].front().c_str();
+    const uint8_t *solution = _readySolutions[solverID].front();
     _readySolutions[solverID].pop();
 
     return solution;
@@ -79,7 +73,7 @@ const std::string SolutionHandler::getNextSolution(const int solverID)
  * @param solverID The ID fo the solver linked to the queue
  * @return A pointer to the solvers queue
  */
-std::queue<std::string> *SolutionHandler::getQueue(const int solverID)
+std::queue<const uint8_t *> * SolutionHandler::getQueue(const int solverID)
 {
     if (solverID > _numberOfThreads)
         return nullptr;
@@ -91,12 +85,18 @@ std::queue<std::string> *SolutionHandler::getQueue(const int solverID)
  */
 void SolutionHandler::_CreateSolutions()
 {
-    for (int i = 0; i < _numberOfThreads; ++i)
+    int tempNum = 1;
+
+    if(_numberOfThreads > 0)
+        tempNum = _numberOfThreads;
+
+    for (int i = 0; i < tempNum; ++i)
     {
         if (_readySolutions[i].size() < 100)
         {
-            _readySolutions[i].push(_keyGenerator.getString());
-            _keyGenerator.incrementString();
+            _readySolutions[i].push(_keyGenerator.getStringNorm());
+
+            _keyGenerator.incrementStringNorm();
         }
     }
 }

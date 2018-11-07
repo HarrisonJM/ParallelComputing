@@ -24,7 +24,7 @@ bool ThreadHandler::getDone()
     omp_unset_lock(&_lock);
 }
 
-void ThreadHandler::setDone()
+void ThreadHandler::setDone(bool update)
 {
     omp_set_lock(&_lock);
     _done = true;

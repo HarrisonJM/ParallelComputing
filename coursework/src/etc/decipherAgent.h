@@ -22,40 +22,51 @@ class decipherAgent
 {
 public:
     decipherAgent(int agentID
-                      , threadHandler::ThreadHandler &th
-                      , unsigned char *encipheredText
-                      , int encLength
-                      , void (*_errorHandle)()
-                      , etc::solutionHandler::SolutionHandler &sh);
+                  , threadHandler::ThreadHandler &th
+                  , uint8_t *encipheredText
+                  , int encLength
+                  , etc::solutionHandler::SolutionHandler &sh);
 
     ~decipherAgent() = default;
 
-    void startCracking();
+    void startCrackingSerial();
+    void startCrackingWithOpenMP();
+    void startCrackingWithMPI();
 
 private:
 
     const int _ID;
 
-    const unsigned char _iv[128];
-    unsigned char* _encipheredText[16384];
-    int _encLength;
-    unsigned char *_plaintext;
+    const uint8_t *_iv;
+    const uint8_t *_encipheredText;
+    const int _encLength;
+
+    uint8_t *_plaintext;
     threadHandler::ThreadHandler &_th;
 
-    void (*_handleOpenSSLErrors)(void);
-    std::queue<std::string> *_keyToTry;
+    std::queue<const uint8_t *> *_keyToTry;
 
-    const char *_AccessKey();
-    void _PerformCracking();
+    const EVP_CIPHER *_cipherType;
+    int _PerformCrackingSerial();
 
-    void _InitContext(EVP_CIPHER_CTX *ctx);
+    int _PerformCrackingOpenMP();
+    int _PerformCrackingMPI();
+    void _InitContext(EVP_CIPHER_CTX **ctx);
     void _InitDecrypt(EVP_CIPHER_CTX *ctx
-                      , const unsigned char *key);
+                      , const uint8_t *key);
+
     void _DecryptUpdate(EVP_CIPHER_CTX *ctx
-                            , int plaintext_length);
-    void _FinaliseDecryption(EVP_CIPHER_CTX *ctx
-                             , long plaintext_length
-                             , int lengthLeft);
+                        , uint8_t **ptOut
+                        , int *outLength
+                        , int numBytes);
+    int _FinaliseDecryption(EVP_CIPHER_CTX *ctx
+                            , uint8_t **ptOut
+                            , int *lengthLeft);
+
+    const uint8_t *_AccessKey() const;
+    const void _handleOpenSSLErrors() const;
+    const bool _accessThreadHandler(bool* update) const;
+
 };
 } /* NAMESPACE etc::decipher */
 

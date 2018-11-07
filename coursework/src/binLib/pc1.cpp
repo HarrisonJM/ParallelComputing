@@ -18,11 +18,11 @@ int main(void)
 
     etc::solutionHandler::SolutionHandler sg(1 ,th);
 
-    sg.Gen();
-    std::queue<std::string>* sq = sg.getQueue(0);
+//    sg.Gen();
+//    std::queue<std::string>* sq = sg.getQueue(0);
 
-    std::string foo = sq->front();
-    std::cout << foo << std::endl;
+//    std::string foo = sq->front();
+//    std::cout << foo << std::endl;
 
     return 0;
 }

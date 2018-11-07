@@ -20,7 +20,7 @@ public:
     ~ThreadHandler() = default;
 
     bool getDone();
-    void setDone();
+    void setDone(bool update);
 private:
     bool _done;
     omp_lock_t &_lock;

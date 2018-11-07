@@ -21,19 +21,19 @@ class SolutionHandler
 public:
     SolutionHandler(const int numberOfThreads
                     , threadHandler::ThreadHandler &thread);
-    ~SolutionHandler();
+    ~SolutionHandler() = default;
 
     void GenUsingHandler();
     void Gen();
 
-    const std::string getNextSolution(const int solverID);
-    std::queue<std::string> *getQueue(const int solverID);
+    const uint8_t * getNextSolution(const int solverID);
+    std::queue<const uint8_t *> * getQueue(const int solverID);
 
 private:
     /* members */
     const int _numberOfThreads;
     //! Holds all the things for the stuffs
-    std::queue<std::string> *_readySolutions;
+    std::queue<const uint8_t*> *_readySolutions;
     threadHandler::ThreadHandler &_th;
 
     etc::key::key _keyGenerator;
@@ -41,6 +41,7 @@ private:
     /* methods */
     void _CreateSolutions();
 };
+
 } /* NAMESPACE etc::solutionHandler */
 
 #endif /*PROTOCOLDEVELOPER_SOLUTIONGENERATOR_H*/

@@ -6,9 +6,10 @@
  * @date 04/11/18
  */
 
-
 #ifndef PROTOCOLDEVELOPER_KEYSEGMENT_H
 #define PROTOCOLDEVELOPER_KEYSEGMENT_H
+
+#include <cstdint>
 
 namespace etc::key
 {
@@ -25,7 +26,7 @@ public:
 
 private:
     int _segNum;
-    char _c;
+    uint8_t _c;
     keySegment *_nextSegment;
 };
 } /* NAMEPSACE etc::key */

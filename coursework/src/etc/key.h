@@ -22,11 +22,15 @@ class key
 public:
     key();
     ~key() = default;
-    void incrementString();
-    const std::string getString();
+    void incrementStringObj();
+    void incrementStringNorm();
+    const std::string getStringObj();
+    const uint8_t* getStringNorm();
 
 private:
     keySegment _firstSeg;
+
+    uint8_t _fullKey[17]; // 128 bit key (16 bytes, 16 chars)
 };
 }
 }

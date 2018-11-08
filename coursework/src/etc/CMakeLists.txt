@@ -1,7 +1,7 @@
 
 add_library(key
-        keySegment.cpp
-        key.cpp)
+        key/keySegment.cpp
+        key/key.cpp)
 
 #############################
 add_library(threadHandler
@@ -10,10 +10,10 @@ add_library(threadHandler
 
 #############################
 add_library(decipher
-        decipherAgentHandler.cpp
-        decipherAgentHandler.h
-        decipherAgent.cpp
-        decipherAgent.h courseworkHandler.cpp courseworkHandler.h)
+        ssl/decipherAgentHandler.cpp
+        ssl/decipherAgentHandler.h
+        ssl/decipherAgent.cpp
+        ssl/decipherAgent.h courseworkHandler.cpp courseworkHandler.h)
 
 target_link_libraries(decipher
         threadHandler)
@@ -26,3 +26,7 @@ add_library(solutionHandler
 target_link_libraries(solutionHandler
         key
         threadHandler)
+
+############################
+add_library(textReader
+        readerWriter/encipheredTextReader.cpp)

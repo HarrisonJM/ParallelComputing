@@ -14,7 +14,7 @@
 #include "decipherAgent.h"
 #include "solutionHandler.h"
 
-namespace etc::decipher
+namespace etc::ssl::decipher
 {
 /*!
  * @brief constructor
@@ -46,8 +46,9 @@ decipherAgent::decipherAgent(int agentID
  */
 void decipherAgent::startCrackingSerial()
 {
+    solutionHandler::SolutionHandler sh(1, _th);
     // Will run the cracking in serial
-    while (_PerformCrackingSerial());
+    while (_PerformCrackingSerial(sh));
 }
 /*!
  * Kicks off the cracking using openMP
@@ -63,14 +64,15 @@ void decipherAgent::startCrackingWithMPI()
 }
 /*!
  * @brief performs the actual decryption
+ * @param sh a reference to the solution handler that can dish out
  */
-int decipherAgent::_PerformCrackingSerial()
+int decipherAgent::_PerformCrackingSerial(solutionHandler::SolutionHandler &sh)
 {
     EVP_CIPHER_CTX *ctx;
 
     _InitContext(&ctx);
     _InitDecrypt(ctx,
-                 _AccessKey());
+                 sh.GetOneSolution());
 
     int plaintextLength;
     int readBytes = 1;
@@ -126,7 +128,10 @@ int decipherAgent::_PerformCrackingOpenMP()
 
     return res;
 }
-
+/*!
+ *
+ * @return
+ */
 int decipherAgent::_PerformCrackingMPI()
 {
     return 1;

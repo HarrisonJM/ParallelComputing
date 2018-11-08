@@ -14,4 +14,5 @@ namespace etc::decipher
 decipherAgentHandler::decipherAgentHandler()
 {
 }
+
 } /* NAMESPACE etc::decipher */

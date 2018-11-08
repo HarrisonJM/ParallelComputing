@@ -5,9 +5,10 @@ assert(1, "NO OPENMP!");
 #include <omp.h>
 #include <iostream>
 
-#include "key.h"
+#include "key/key.h"
 #include "threadHandler.h"
 #include "solutionHandler.h"
+#include "ssl/decipherAgent.h"
 
 int main(void)
 {
@@ -17,12 +18,8 @@ int main(void)
     etc::threadHandler::ThreadHandler th(threadLock);
 
     etc::solutionHandler::SolutionHandler sg(1 ,th);
-
-//    sg.Gen();
-//    std::queue<std::string>* sq = sg.getQueue(0);
-
-//    std::string foo = sq->front();
-//    std::cout << foo << std::endl;
+    etc::decipher::decipherAgent(0, th,
+    )
 
     return 0;
 }

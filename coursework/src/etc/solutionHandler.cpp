@@ -100,4 +100,17 @@ void SolutionHandler::_CreateSolutions()
         }
     }
 }
+/*!
+ * @brief grabs a single key
+ * @return A pointer holding the string
+ */
+const uint8_t * SolutionHandler::GetOneSolution()
+{
+    static etc::key::key key1;
+
+    const uint8_t* key = key1.getStringNorm();
+    _keyGenerator.incrementStringNorm();
+
+    return key;
+}
 } /* NAMESPACE etc::solutionHandler */

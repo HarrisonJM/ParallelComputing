@@ -15,7 +15,7 @@
 #include "threadHandler.h"
 #include "solutionHandler.h"
 
-namespace etc::decipher
+namespace etc::ssl::decipher
 {
 
 class decipherAgent
@@ -47,7 +47,7 @@ private:
     std::queue<const uint8_t *> *_keyToTry;
 
     const EVP_CIPHER *_cipherType;
-    int _PerformCrackingSerial();
+    int _PerformCrackingSerial(solutionHandler::SolutionHandler &sh);
 
     int _PerformCrackingOpenMP();
     int _PerformCrackingMPI();

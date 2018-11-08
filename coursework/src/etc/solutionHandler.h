@@ -8,7 +8,7 @@
 #include <vector>
 #include <queue>
 #include "threadHandler.h"
-#include "key.h"
+#include "key/key.h"
 
 #ifndef PROTOCOLDEVELOPER_SOLUTIONGENERATOR_H
 #define PROTOCOLDEVELOPER_SOLUTIONGENERATOR_H
@@ -28,6 +28,7 @@ public:
 
     const uint8_t * getNextSolution(const int solverID);
     std::queue<const uint8_t *> * getQueue(const int solverID);
+    const uint8_t * GetOneSolution();
 
 private:
     /* members */

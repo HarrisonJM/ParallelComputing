@@ -13,11 +13,11 @@
 namespace etc::decipher
 {
 
-class decipherAgentHandler
+class CipherAgentHandler
 {
 public:
-    decipherAgentHandler();
-    ~decipherAgentHandler();
+    CipherAgentHandler();
+    ~CipherAgentHandler();
 private:
 };
 } /* NAMESPACE etc::decipher */

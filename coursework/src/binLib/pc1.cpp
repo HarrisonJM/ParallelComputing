@@ -1,25 +1,13 @@
+#include <courseworkHandler.h>
+
 #ifndef _OPENMP
 assert(1, "NO OPENMP!");
 #endif
 
-#include <omp.h>
-#include <iostream>
-
-#include "key/key.h"
-#include "threadHandler.h"
-#include "solutionHandler.h"
-#include "ssl/decipherAgent.h"
-
-int main(void)
+int main()
 {
-    etc::key::key key;
-    omp_lock_t threadLock;
-
-    etc::threadHandler::ThreadHandler th(threadLock);
-
-    etc::solutionHandler::SolutionHandler sg(1 ,th);
-    etc::decipher::decipherAgent(0, th,
-    )
+    etc::CourseworkHandler ch;
+    ch.Start();
 
     return 0;
 }

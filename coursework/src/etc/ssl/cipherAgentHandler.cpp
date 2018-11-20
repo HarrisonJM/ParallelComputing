@@ -6,12 +6,12 @@
  * @date 04/11/18
  */
 
-#include "decipherAgentHandler.h"
+#include "cipherAgentHandler.h"
 
 namespace etc::decipher
 {
 
-decipherAgentHandler::decipherAgentHandler()
+CipherAgentHandler::CipherAgentHandler()
 {
 }
 

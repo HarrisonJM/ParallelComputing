@@ -107,9 +107,9 @@ void SolutionHandler::_CreateSolutions()
 const uint8_t * SolutionHandler::GetOneSolution()
 {
     static etc::key::key key1;
+    key1.incrementStringNorm();
 
     const uint8_t* key = key1.getStringNorm();
-    _keyGenerator.incrementStringNorm();
 
     return key;
 }

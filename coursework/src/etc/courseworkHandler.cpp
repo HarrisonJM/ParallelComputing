@@ -3,6 +3,7 @@
  *
  * @date 07/11/18
  */
+#include <omp.h>
 
 #include <cstdint>
 #include <openssl/rand.h>
@@ -10,30 +11,28 @@
 #include <cstring>
 
 #include "key/key.h"
-#include "ssl/cipherAgent.h"
+#include "ssl/cipherDoer.h"
 #include "courseworkHandler.h"
+#include "ssl/decipherDoer.h"
 
 namespace etc
 {
 
 CourseworkHandler::CourseworkHandler()
-    : _plainTextInitial((uint8_t*) "1234567890123456123456789012345612345678901234561234567890123456")
+    : _plaintextInitial((uint8_t*) "MARY HAD A LITTLE LAMB1234567890") // 32 characters lopng
+      , _plaintextInitialLength(0)
+      , _encryptedText(new uint8_t[16384])
+      , _encLength(0)
       , _iv(nullptr)
 {
     // Setup and init _iv
     _iv = new uint8_t[AES_BLOCK_SIZE];
-//    RAND_bytes(*_iv,
-//               sizeof(_iv));
-
-    for (int i = 0; i <= AES_BLOCK_SIZE; ++i)
-    {
-        (_iv)[i] = 0x01;
-    }
-
+    RAND_bytes(_iv,
+               sizeof(_iv));
 
     // The key we're encrypting with
-    _definedKey = new uint8_t[AES_128_KEY_SIZE/8];
-    for (int i = 0; i <= AES_128_KEY_SIZE/8; ++i)
+    //! @todo foreach
+    for (int i = 0; i < 17; ++i)
     {
         _definedKey[i] = 0x00;
     }
@@ -41,77 +40,80 @@ CourseworkHandler::CourseworkHandler()
     _definedKey[0] = 0x01;
     _definedKey[1] = 0x02;
     _definedKey[2] = 0x03;
+
+    _plaintextInitialLength = (int) std::strlen((char*) _plaintextInitial);
+
+    etc::ssl::decipher::CipherDoer::EncipherText(_definedKey,
+                                                 _iv,
+                                                 _plaintextInitial,
+                                                 &_encryptedText,
+                                                 &_encLength,
+                                                 &_plaintextInitialLength);
 }
 
 void CourseworkHandler::StartSerial()
 {
-    // The thread lock we're using
-    omp_lock_t threadLock;
-    int encLength;
-    /*int plaintextLengthinit = sizeof(_plainTextInitial);*/
-    auto plaintextLengthinit = (int) std::strlen((char*) _plainTextInitial);
-    // The encrypted text
-    uint8_t* encryptedText;
     // Where to store the final decrypted file
-    uint8_t* plaintextFinal;
-    _initThings(_iv,
-                &plaintextFinal,
-                &encryptedText,
-                &encLength,
-                &plaintextLengthinit,
-                _definedKey,
-                _plainTextInitial);
+    auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
 
     etc::key::key key;
+    int success = 0;
+    do
+    {
+        int plaintextLengthSerial = 0;
+        success = etc::ssl::decipher::CipherDoer::DecipherText(key.getStringNorm(),
+                                                               _iv,
+                                                               &plaintextFinal,
+                                                               &_encryptedText,
+                                                               &plaintextLengthSerial,
+                                                               &_encLength);
+        key.incrementStringNorm();
 
-//    std::cout << "IV:" << _iv << std::endl;
-//    std::cout << "PT:" << _plainTextInitial << std::endl;
-//    std::cout << "ET:" << encryptedText << std::endl;
-
-
-    int plaintextLengthSerial;
-    etc::ssl::decipher::CipherAgent::DecipherText(_definedKey,
-                                                  _iv,
-                                                  &plaintextFinal,
-                                                  &encryptedText,
-                                                  &plaintextLengthSerial,
-                                                  &encLength);
+        if (success)
+        {
+            if (std::strcmp((char*) plaintextFinal,
+                            (char*) _plaintextInitial) != 0)
+            {
+                //False decryption
+                success = 0;
+            }
+        }
+    } while (!success);
 
     std::cout << "Final: " << plaintextFinal << std::endl;
 
-    etc::threadHandler::ThreadHandler th(threadLock);
-    etc::solutionHandler::SolutionHandler sh(1,
-                                             th);
-    etc::solutionHandler::SolutionHandler sh2(1,
-                                              th);
+    delete[] plaintextFinal;
 }
-/*!
- * @brief initialises storage and encrypts plaintext
- * @param iv Init Vector
- * @param plaintextFinal Where the final plaintext is sotred
- * @param encryptedText Where the encrytped text will be stored
- * @param encLength The length of the encrypted file
- * @param plaintextLength The length of the plaintext
- * @param key The key
- * @param plaintext The plaintext
- */
-void CourseworkHandler::_initThings(uint8_t* iv
-                                    , uint8_t** plaintextFinal
-                                    , uint8_t** encryptedText
-                                    , int* encLength
-                                    , int* plaintextLength
-                                    , const uint8_t* key
-                                    , uint8_t* plaintext)
+
+void CourseworkHandler::StartOpenMP()
 {
+    omp_lock_t threadLock;
+    etc::threadHandler::ThreadHandler th(threadLock);
+    etc::solutionHandler::SolutionHandler sh(4,
+                                             th);
 
-    *plaintextFinal = new uint8_t[KILOBYTE16];
-    *encryptedText = new uint8_t[KILOBYTE16];
+    // Start generating solutions
+#pragma omp sections nowait
+    {
+#pragma omp section
+        sh.GenUsingHandler();
+    };
 
-    etc::ssl::decipher::CipherAgent::EncipherText(key,
-                                                  iv,
-                                                  &plaintext,
-                                                  encryptedText,
-                                                  encLength,
-                                                  plaintextLength);
+    std::vector<ssl::decipherDoer*> doers;
+    for (int i = 0; i < 4; ++i)
+    {
+        doers[i] = new ssl::decipherDoer(i,
+                                         _iv,
+                                         _encryptedText,
+                                         _encLength,
+                                         _plaintextInitial,
+                                         _plaintextInitialLength,
+                                         th,
+                                         sh.getQueue(i));
+    }
+
+    for (int i = 0; i < 10000; ++i)
+    {
+    }
 }
 } /* namespace etc */

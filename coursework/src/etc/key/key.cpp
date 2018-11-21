@@ -15,9 +15,14 @@ namespace etc::key
  */
 key::key()
     : _firstSeg(0)
-    , _fullKey("")
-    , _keyLength(0)
+      , _fullKey()
+      , _keyLength(0)
 {
+    //! @todo foreach
+    for (int i = 0; i < 17; ++i)
+    {
+        _fullKey[i] = 0x00;
+    }
 }
 /*!
  * @brief Increments the current string

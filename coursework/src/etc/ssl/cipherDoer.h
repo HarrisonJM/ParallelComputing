@@ -13,6 +13,7 @@
 #include <openssl/ssl.h>
 #include <openssl/aes.h>
 #include <openssl/evp.h>
+#include <cstdint>
 
 #include "threadHandler.h"
 #include "solutionHandler.h"
@@ -20,36 +21,28 @@
 namespace etc::ssl::decipher
 {
 
-class CipherAgent
+class CipherDoer
 {
 public:
-    explicit CipherAgent(const uint8_t* iv);
-    ~CipherAgent() = default;
+    CipherDoer() = default;
+    ~CipherDoer() = default;
 
     static int EncipherText(const uint8_t* key
                             , const uint8_t* iv
-                            , uint8_t** plaintext
+                            , const uint8_t* plaintext
                             , uint8_t** encipheredText
                             , int* outLen
                             , int* inLen);
     static int DecipherText(const uint8_t* key
                             , const uint8_t* iv
-                            , uint8_t** plaintext
-                            , uint8_t** encipheredText
-                            , int* plaintextLength
-                            , int* encipheredTextLength);
+                            , uint8_t** out
+                            , uint8_t** in
+                            , int* outLen
+                            , int* inLen);
 
 private:
-    const uint8_t* _iv;
 
     static void _handleOpenSSLErrors();
-    static int _CipherText(int mode
-                           , const uint8_t* key
-                           , const uint8_t* iv
-                           , uint8_t** in
-                           , uint8_t** out
-                           , int* outLen
-                           , int* inLen);
 };
 } /* NAMESPACE etc::decipher */
 

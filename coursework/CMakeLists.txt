@@ -23,8 +23,8 @@ add_library(threadHandler
 
 #############################
 add_library(decipher
-        src/etc/ssl/cipherAgent.cpp
-        src/etc/ssl/cipherAgent.h)
+        src/etc/ssl/cipherDoer.cpp
+        src/etc/ssl/cipherDoer.h)
 
 target_link_libraries(decipher
         threadHandler)
@@ -37,6 +37,15 @@ add_library(solutionHandler
 target_link_libraries(solutionHandler
         key
         threadHandler)
+#############################
+add_library(decipherer
+        src/etc/ssl/decipherDoer.cpp
+        src/etc/ssl/decipherDoer.h)
+
+target_link_libraries(decipherer
+        threadHandler
+        solutionHandler
+        decipher)
 
 #############################
 
@@ -49,7 +58,8 @@ target_link_libraries(courseworkHandler
         solutionHandler
         decipher
         key
-        OpenSSL::SSL)
+        OpenSSL::SSL
+        decipherer)
 
 add_executable(coursework.elf
         src/binLib/pc1.cpp)

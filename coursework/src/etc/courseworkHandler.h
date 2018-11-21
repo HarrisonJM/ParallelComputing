@@ -27,18 +27,16 @@ public:
     CourseworkHandler();
     ~CourseworkHandler() = default;
     void StartSerial();
+    void StartOpenMP();
 private:
-    void _initThings(uint8_t* iv
-                     , uint8_t** plaintextFinal
-                     , uint8_t** encryptedText
-                     , int* encLength
-                     , int* plaintextLength
-                     , const uint8_t* key
-                     , uint8_t* plaintext);
 
-    uint8_t* _plainTextInitial;
+    uint8_t* _plaintextInitial;
+    int _plaintextInitialLength;
+    uint8_t* _encryptedText;
+    int _encLength;
     uint8_t* _iv;
-    uint8_t* _definedKey;
+    uint8_t _definedKey[17];
+
 };
 }
 

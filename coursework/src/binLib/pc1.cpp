@@ -8,6 +8,7 @@ int main()
 {
     etc::CourseworkHandler ch;
     ch.StartSerial();
+    ch.StartOpenMP();
 
     return 0;
 }

@@ -9,17 +9,17 @@
 #include <openssl/rand.h>
 #include <iostream>
 #include <cstring>
+#include <openssl/ssl.h>
 
 #include "key/key.h"
 #include "ssl/cipherDoer.h"
 #include "courseworkHandler.h"
 #include "ssl/decipherDoer.h"
 
-namespace etc
-{
+namespace etc {
 
 CourseworkHandler::CourseworkHandler()
-    : _plaintextInitial((uint8_t*) "MARY HAD A LITTLE LAMB1234567890") // 32 characters lopng
+    : _plaintextInitial((uint8_t *) "MARY HAD A LITTLE LAMB1234567890") // 32 characters lopng
       , _plaintextInitialLength(0)
       , _encryptedText(new uint8_t[16384])
       , _encLength(0)
@@ -32,7 +32,7 @@ CourseworkHandler::CourseworkHandler()
 
     // The key we're encrypting with
     //! @todo foreach
-    for (int i = 0; i < 17; ++i)
+    for(int i = 0; i < 17; ++i)
     {
         _definedKey[i] = 0x00;
     }
@@ -41,7 +41,7 @@ CourseworkHandler::CourseworkHandler()
     _definedKey[1] = 0x02;
     _definedKey[2] = 0x03;
 
-    _plaintextInitialLength = (int) std::strlen((char*) _plaintextInitial);
+    _plaintextInitialLength = (int) std::strlen((char *) _plaintextInitial);
 
     etc::ssl::decipher::CipherDoer::EncipherText(_definedKey,
                                                  _iv,
@@ -54,7 +54,7 @@ CourseworkHandler::CourseworkHandler()
 void CourseworkHandler::StartSerial()
 {
     // Where to store the final decrypted file
-    auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
+    auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE * 2];
 
     etc::key::key key;
     int success = 0;
@@ -69,16 +69,17 @@ void CourseworkHandler::StartSerial()
                                                                &_encLength);
         key.incrementStringNorm();
 
-        if (success)
+        if(success)
         {
-            if (std::strcmp((char*) plaintextFinal,
-                            (char*) _plaintextInitial) != 0)
+            if(std::strcmp((char *) plaintextFinal,
+                           (char *) _plaintextInitial) != 0)
             {
                 //False decryption
                 success = 0;
             }
         }
-    } while (!success);
+    }
+    while(!success);
 
     std::cout << "Final: " << plaintextFinal << std::endl;
 
@@ -95,25 +96,27 @@ void CourseworkHandler::StartOpenMP()
     // Start generating solutions
 #pragma omp sections nowait
     {
-#pragma omp section
         sh.GenUsingHandler();
     };
 
-    std::vector<ssl::decipherDoer*> doers;
-    for (int i = 0; i < 4; ++i)
+    std::vector<etc::ssl::decipherDoer *> doers;
+    for(int i = 0; i < 4; ++i)
     {
-        doers[i] = new ssl::decipherDoer(i,
-                                         _iv,
-                                         _encryptedText,
-                                         _encLength,
-                                         _plaintextInitial,
-                                         _plaintextInitialLength,
-                                         th,
-                                         sh.getQueue(i));
+        doers[i] = new etc::ssl::decipherDoer(i,
+                                              _iv,
+                                              _encryptedText,
+                                              _encLength,
+                                              _plaintextInitial,
+                                              _plaintextInitialLength,
+                                              th,
+                                              sh.getQueue(i));
     }
 
-    for (int i = 0; i < 10000; ++i)
+#pragma omp parallel num_threads(4)
     {
+        int threadNum = omp_get_thread_num();
+        (doers[threadNum])->startDecrypting();
     }
 }
+
 } /* namespace etc */

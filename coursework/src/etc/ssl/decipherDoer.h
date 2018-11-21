@@ -29,7 +29,7 @@ public:
                  , uint8_t* plainText
                  , int plainTextLength
                  , etc::threadHandler::ThreadHandler &th
-                 , std::queue<uint8_t*> &solutionQueue);
+                 , std::queue<const uint8_t*> *solutionQueue);
 
     ~decipherDoer() = default;
 
@@ -42,7 +42,7 @@ private:
     uint8_t* _plainTextcmp;
     decipher::CipherDoer _decrypter;
     etc::threadHandler::ThreadHandler &_th;
-    std::queue<uint8_t*> &_solutions;
+    std::queue<const uint8_t*> *_solutions;
 };
 }
 

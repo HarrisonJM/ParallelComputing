@@ -7,6 +7,7 @@
  */
 
 #include <cstring>
+#include <iostream>
 #include "decipherDoer.h"
 
 namespace etc::ssl
@@ -19,7 +20,7 @@ decipherDoer::decipherDoer(int agentID
                            , uint8_t* plainText
                            , int plainTextLength
                            , etc::threadHandler::ThreadHandler &th
-                           , std::queue<uint8_t*> &solutionQueue)
+                           , std::queue<const uint8_t*> *solutionQueue)
     : _agentID(agentID)
       , _iv(new uint8_t[AES_BLOCK_SIZE])
       , _encryptedText(new uint8_t[encLength])
@@ -60,24 +61,28 @@ void decipherDoer::startDecrypting()
             return;
 
         auto plaintextLengthSerial = 0;
-        success = etc::ssl::decipher::CipherDoer::DecipherText(_solutions.front(),
+        success = etc::ssl::decipher::CipherDoer::DecipherText(_solutions->front(),
                                                                _iv,
                                                                &plaintextFinal,
                                                                &_encryptedText,
                                                                &plaintextLengthSerial,
                                                                &_encryptedTextLength);
-        _solutions.pop();
 
+        std::cout << "testing key: " << std::hex << _solutions->front() << std::endl;
         if (success)
         {
             if (std::strcmp((char*) plaintextFinal,
                             (char*) _plainTextcmp) != 0)
             {
-                //False decryption
-                success = 0;
+                break;
             }
         }
+
+        _solutions->pop();
     } while (!success);
+
+    std::cout << "Result: " << plaintextFinal << std::endl;
+    std::cout << "Key: " << (_solutions->front()) << std::endl;
 
     // We have been successful, alert the other threads
     _th.setDone(true);

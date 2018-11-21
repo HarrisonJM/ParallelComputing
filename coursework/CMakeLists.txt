@@ -23,8 +23,6 @@ add_library(threadHandler
 
 #############################
 add_library(decipher
-        src/etc/ssl/cipherAgentHandler.cpp
-        src/etc/ssl/cipherAgentHandler.h
         src/etc/ssl/cipherAgent.cpp
         src/etc/ssl/cipherAgent.h)
 

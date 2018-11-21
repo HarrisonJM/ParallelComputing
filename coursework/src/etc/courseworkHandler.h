@@ -24,17 +24,21 @@ namespace etc
 class CourseworkHandler
 {
 public:
-    CourseworkHandler() = default;
+    CourseworkHandler();
     ~CourseworkHandler() = default;
-    void Start();
+    void StartSerial();
 private:
-    void _initThings(uint8_t** iv
-                         , uint8_t** plaintextFinal
-                         , uint8_t** encryptedText
-                         , int* encLength
-                         , int* plaintextLength
-                         , const uint8_t* key
-                         , const uint8_t* plaintext);
+    void _initThings(uint8_t* iv
+                     , uint8_t** plaintextFinal
+                     , uint8_t** encryptedText
+                     , int* encLength
+                     , int* plaintextLength
+                     , const uint8_t* key
+                     , uint8_t* plaintext);
+
+    uint8_t* _plainTextInitial;
+    uint8_t* _iv;
+    uint8_t* _definedKey;
 };
 }
 

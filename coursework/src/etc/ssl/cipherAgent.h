@@ -23,63 +23,33 @@ namespace etc::ssl::decipher
 class CipherAgent
 {
 public:
-    CipherAgent(int agentID
-                    , threadHandler::ThreadHandler &th
-                    , solutionHandler::SolutionHandler &sh);
-
-    explicit CipherAgent(threadHandler::ThreadHandler &th);
-
+    explicit CipherAgent(const uint8_t* iv);
     ~CipherAgent() = default;
 
-    void startCrackingSerial(const uint8_t* encipheredText
-                             , uint8_t** plaintext
-                             , int encLength
-                             , int* plaintextLength);
-    void startCrackingWithOpenMP();
-    void startCrackingWithMPI();
-
-    void EncipherText(const uint8_t* key
-                      , const uint8_t* iv
-                      , const uint8_t* plaintext
-                      , uint8_t** encipheredText
-                      , int* outLen
-                      , int* inLen) const;
+    static int EncipherText(const uint8_t* key
+                            , const uint8_t* iv
+                            , uint8_t** plaintext
+                            , uint8_t** encipheredText
+                            , int* outLen
+                            , int* inLen);
+    static int DecipherText(const uint8_t* key
+                            , const uint8_t* iv
+                            , uint8_t** plaintext
+                            , uint8_t** encipheredText
+                            , int* plaintextLength
+                            , int* encipheredTextLength);
 
 private:
-    const int _ID;
-
     const uint8_t* _iv;
 
-    threadHandler::ThreadHandler &_th;
-
-    std::queue<const uint8_t*>* _keyToTry;
-
-    const EVP_CIPHER* _cipherType;
-    int _PerformCrackingSerial(solutionHandler::SolutionHandler &sh
-                               , const uint8_t* in
-                               , uint8_t** out
-                               , int* outLength
-                               , int inLength);
-
-    int _PerformCrackingOpenMP();
-    int _PerformCrackingMPI();
-    void _InitContext(EVP_CIPHER_CTX** ctx);
-    void _InitDecrypt(EVP_CIPHER_CTX* ctx
-                      , const uint8_t* key);
-
-    void _DecryptUpdate(EVP_CIPHER_CTX* ctx
-                        , uint8_t** out
-                        , int* outLength
-                        , int inLength
-                        , const uint8_t* in);
-    int _FinaliseDecryption(EVP_CIPHER_CTX* ctx
-                            , uint8_t** out
-                            , int* outLength);
-
-    const uint8_t* _AccessKey() const;
-
-    void _handleOpenSSLErrors() const;
-    const bool _accessThreadHandler(bool* update) const;
+    static void _handleOpenSSLErrors();
+    static int _CipherText(int mode
+                           , const uint8_t* key
+                           , const uint8_t* iv
+                           , uint8_t** in
+                           , uint8_t** out
+                           , int* outLen
+                           , int* inLen);
 };
 } /* NAMESPACE etc::decipher */
 

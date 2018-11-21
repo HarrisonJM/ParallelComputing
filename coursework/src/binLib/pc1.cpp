@@ -7,7 +7,7 @@ assert(1, "NO OPENMP!");
 int main()
 {
     etc::CourseworkHandler ch;
-    ch.Start();
+    ch.StartSerial();
 
     return 0;
 }

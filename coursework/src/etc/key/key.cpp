@@ -77,11 +77,21 @@ const std::string key::getStringObj()
 
     return keyStr;
 }
-const uint8_t *key::getStringNorm()
+uint8_t* key::getStringNorm()
 {
     auto* newKey = new uint8_t[16];
     memcpy(newKey, _fullKey, 16);
 
     return newKey;
 }
+
+//uint8_t* key::getStringNormSpace(int id)
+//{
+//    uint8_t* keyret = _store[id].front();
+//    incrementStringNorm();
+//    _store[id].pop();
+//    _store[id].push(getStringNorm());
+//
+//    return keyret;
+//}
 } /* NAMESPACE etc::key */

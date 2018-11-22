@@ -9,6 +9,7 @@
 #define PROTOCOLDEVELOPER_DECIPHERDOER_H
 
 #include <queue>
+#include <functional>
 
 // For controlling the threads
 #include "../threadHandler.h"
@@ -29,7 +30,7 @@ public:
                  , uint8_t* plainText
                  , int plainTextLength
                  , etc::threadHandler::ThreadHandler &th
-                 , std::queue<const uint8_t*> *solutionQueue);
+                 , std::function<uint8_t()>* solutionGetter);
 
     ~decipherDoer() = default;
 
@@ -40,9 +41,8 @@ private:
     uint8_t* _encryptedText;
     int _encryptedTextLength;
     uint8_t* _plainTextcmp;
-    decipher::CipherDoer _decrypter;
     etc::threadHandler::ThreadHandler &_th;
-    std::queue<const uint8_t*> *_solutions;
+    std::function<uint8_t()>* _solutions;
 };
 }
 

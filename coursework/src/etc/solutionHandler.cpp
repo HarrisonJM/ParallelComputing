@@ -40,10 +40,17 @@ SolutionHandler::SolutionHandler(const int numberofThreads
  */
 void SolutionHandler::GenUsingHandler()
 {
-    while (!_th.getDone())
+    bool done = false;
+
+    do
     {
         _CreateSolutions();
-    }
+
+//        omp_set_lock(_lock);
+        done = _th.getDone();
+//        omp_set_lock(_lock);
+    } while (!done);
+
 }
 /*!
  * @brief Just generates a bunch of solutions

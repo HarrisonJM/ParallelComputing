@@ -36,7 +36,7 @@ private:
     //! Holds all the things for the stuffs
     std::queue<const uint8_t*> *_readySolutions;
     threadHandler::ThreadHandler &_th;
-
+    omp_lock_t* _lock;
     etc::key::key _keyGenerator;
 
     /* methods */

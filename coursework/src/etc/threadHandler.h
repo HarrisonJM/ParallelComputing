@@ -16,14 +16,13 @@ namespace etc::threadHandler
 class ThreadHandler
 {
 public:
-    ThreadHandler(omp_lock_t &lock);
+    ThreadHandler();
     ~ThreadHandler() = default;
 
     bool getDone();
     void setDone(bool update);
 private:
     bool _done;
-    omp_lock_t &_lock;
 };
 } /* NAMESPACE etc::threadHandler */
 

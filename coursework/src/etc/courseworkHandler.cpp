@@ -88,35 +88,54 @@ void CourseworkHandler::StartSerial()
 
 void CourseworkHandler::StartOpenMP()
 {
-    omp_lock_t threadLock;
-    etc::threadHandler::ThreadHandler th(threadLock);
-    etc::solutionHandler::SolutionHandler sh(4,
-                                             th);
+    // Where to store the final decrypted file
 
-    // Start generating solutions
-#pragma omp sections nowait
+    etc::key::key key;
+    int success = 0;
+    bool finish = false;
+    do
     {
-        sh.GenUsingHandler();
-    };
+        omp_lock_t lck;
+        omp_init_lock(&lck);
+#pragma omp parallel for shared(finish, key) reduction(|:success)
+        for (int i = 0; i < 20; ++i)
+        {
+            auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
+            int plaintextLengthSerial = 0;
+            int threadNum = omp_get_thread_num();
 
-    std::vector<etc::ssl::decipherDoer *> doers;
-    for(int i = 0; i < 4; ++i)
-    {
-        doers[i] = new etc::ssl::decipherDoer(i,
-                                              _iv,
-                                              _encryptedText,
-                                              _encLength,
-                                              _plaintextInitial,
-                                              _plaintextInitialLength,
-                                              th,
-                                              sh.getQueue(i));
-    }
+            omp_set_lock(&lck);
+            uint8_t* solution = key.getStringNorm();
+            key.incrementStringNorm();
+            omp_unset_lock(&lck);
 
-#pragma omp parallel num_threads(4)
-    {
-        int threadNum = omp_get_thread_num();
-        (doers[threadNum])->startDecrypting();
-    }
+            success = etc::ssl::decipher::CipherDoer::DecipherText(solution,
+                                                                   _iv,
+                                                                   &plaintextFinal,
+                                                                   &_encryptedText,
+                                                                   &plaintextLengthSerial,
+                                                                   &_encLength);
+            if (success)
+            {
+                if (std::strcmp((char*) plaintextFinal,
+                                (char*) _plaintextInitial) != 0)
+                {
+                    //False decryption
+                    success = 0;
+                }
+                else
+                {
+                    // Successful
+                    std::cout << "Final OpenMP: " << plaintextFinal << std::endl;
+                    success = 1;
+                    finish = true;
+                }
+            }
+
+            delete[] plaintextFinal;
+        }
+    } while (!success && !finish);
+
 }
 
 } /* namespace etc */

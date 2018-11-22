@@ -27,6 +27,7 @@ public:
     CourseworkHandler();
     ~CourseworkHandler() = default;
     void StartSerial();
+    void StartSerial2();
     void StartOpenMP();
 private:
 

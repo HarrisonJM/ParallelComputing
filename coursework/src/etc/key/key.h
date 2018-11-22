@@ -12,6 +12,7 @@
 
 #include <string>
 #include "keySegment.h"
+#include <queue>
 
 namespace etc
 {
@@ -25,9 +26,10 @@ public:
     void incrementStringObj();
     void incrementStringNorm();
     const std::string getStringObj();
-    const uint8_t* getStringNorm();
+    uint8_t* getStringNorm();
 
 private:
+
     keySegment _firstSeg;
 
     uint8_t _fullKey[17]; // 128 bit key (16 bytes, 16 chars)

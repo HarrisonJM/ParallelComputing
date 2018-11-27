@@ -11,7 +11,6 @@
 #define PROTOCOLDEVELOPER_KEY_H
 
 #include <string>
-#include "keySegment.h"
 #include <queue>
 
 namespace etc
@@ -23,15 +22,10 @@ class key
 public:
     key();
     ~key() = default;
-    void incrementStringObj();
     void incrementStringNorm();
-    const std::string getStringObj();
-    uint8_t* getStringNorm();
+    void getStringNorm(uint8_t** keyGet);
 
 private:
-
-    keySegment _firstSeg;
-
     uint8_t _fullKey[17]; // 128 bit key (16 bytes, 16 chars)
     int _keyLength;
 };

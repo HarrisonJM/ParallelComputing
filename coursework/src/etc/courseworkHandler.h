@@ -25,10 +25,10 @@ class CourseworkHandler
 {
 public:
     CourseworkHandler();
-    ~CourseworkHandler() = default;
+    ~CourseworkHandler();
     void StartSerial();
-    void StartSerial2();
     void StartOpenMP();
+    void startMPI();
 private:
 
     uint8_t* _plaintextInitial;
@@ -37,6 +37,9 @@ private:
     int _encLength;
     uint8_t* _iv;
     uint8_t _definedKey[17];
+
+    void _printKey(const uint8_t* key
+                       , const int length);
 
 };
 }

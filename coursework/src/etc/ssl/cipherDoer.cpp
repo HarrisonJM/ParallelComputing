@@ -115,7 +115,6 @@ int CipherDoer::DecipherText(const uint8_t* key
     EVP_CIPHER_CTX* ctx = nullptr;
 
     ctx = EVP_CIPHER_CTX_new();
-//    EVP_CIPHER_CTX_set_padding(ctx, 16);
 
     if (!ctx)
     {
@@ -151,7 +150,7 @@ int CipherDoer::DecipherText(const uint8_t* key
 
     *outLen = outLenBkp + finalLen;
 
-    EVP_CIPHER_CTX_cleanup(ctx);
+    EVP_CIPHER_CTX_free(ctx);
 
     *((*out) + *outLen) = '\0';
 

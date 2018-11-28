@@ -28,8 +28,16 @@ public:
     ~CourseworkHandler();
     void StartSerial();
     void StartOpenMP();
-    void startMPI();
+    void StartMPI();
 private:
+
+    void _MasterWork(int procNum);
+    void _WorkerWork();
+
+    bool _SolutionCheck(const uint8_t* unencText
+                        , const uint8_t* plainText
+                        , const uint8_t* key
+                        , const char* method);
 
     uint8_t* _plaintextInitial;
     int _plaintextInitialLength;

@@ -17,7 +17,7 @@ int main()
     ch.StartOpenMP();
     double finishOMP = omp_get_wtime();
     double startMPI = omp_get_wtime();
-//    ch.StartMPI();
+    ch.StartMPI();
     double finishMPI = omp_get_wtime();
 
     std::cout <<

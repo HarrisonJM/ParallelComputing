@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.9.6)
 project(ProtocolDeveloper LANGUAGES C CXX VERSION 0.1)
 
 set(CMAKE_CXX_FLAGS "-std=c++17 -lpthread -Wall -fopenmp")
+set(CMAKE_CXX_COMPILER mpic++)
 
 find_package(OpenSSL REQUIRED)
 if (OPENSSL_FOUND)

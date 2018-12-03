@@ -1,5 +1,5 @@
 CXX := mpic++
-CXX_FLAGS := -g -fopenmp -std=c++14 -lpthread -Wall
+CXX_FLAGS := -g -fopenmp -std=c++14 -lpthread -Wall 
 LD_LIBS := -lcrypto
 
 BUILDROOT := $(shell pwd)/src/
@@ -15,4 +15,4 @@ all: coursework.out
 coursework.out: $(OBJECTS)
 	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS)
 
-.PHONY: all
+.PHONY: all clean

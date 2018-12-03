@@ -89,18 +89,12 @@ void CourseworkHandler::StartSerial()
 
         if (success)
         {
-            if (std::strcmp((char*) plaintextFinal,
-                            (char*) _plaintextInitial) != 0)
-            {
-                //False decryption
-                success = 0;
-            }
+            success = _SolutionCheck(plaintextFinal,
+                                     _plaintextInitial,
+                                     solution,
+                                     "Serial");
         }
     } while (!success);
-
-    std::cout << "Final: " << plaintextFinal << std::endl;
-    _printKey(solution,
-              AES_128_KEY_SIZE);
 
     delete[] plaintextFinal;
 }
@@ -236,7 +230,7 @@ void CourseworkHandler::_MasterWork(int procNum)
     if (procNum < 2)
     {
         std::cout << "ONLY 1 PROCESSOR!" << std::endl;
-        exit(1);
+        return;
     }
 
     for (int i = 1; i < procNum; ++i)
@@ -429,7 +423,7 @@ bool CourseworkHandler::_SolutionCheck(const uint8_t* unencText
     {
         // Successful
         std::cout <<
-                  "Final" << method << ": " << unencText << std::endl;
+                  "Final " << method << ": " << unencText << std::endl;
         _printKey(key,
                   AES_128_KEY_SIZE);
         // Alert other threads to finish

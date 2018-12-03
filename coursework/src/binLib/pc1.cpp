@@ -1,10 +1,7 @@
-#include <courseworkHandler.h>
+#include "../etc/courseworkHandler.h"
+
 #include <omp.h>
 #include <iostream>
-
-#ifndef _OPENMP
-assert(1, "NO OPENMP!");
-#endif
 
 int main()
 {

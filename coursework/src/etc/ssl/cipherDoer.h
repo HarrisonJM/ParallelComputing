@@ -15,7 +15,11 @@
 #include <openssl/evp.h>
 #include <cstdint>
 
-namespace etc::ssl::decipher
+namespace etc
+{
+namespace ssl
+{
+namespace decipher
 {
 
 class CipherDoer
@@ -41,6 +45,8 @@ private:
 
     static void _handleOpenSSLErrors();
 };
+}
+}
 } /* NAMESPACE etc::decipher */
 
 #endif /*PROTOCOLDEVELOPER_DECIPHERAGENT_H*/

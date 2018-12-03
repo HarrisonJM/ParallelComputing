@@ -15,7 +15,11 @@
 #define KILOBYTE16 16384
 #endif
 
-namespace etc::ssl::decipher
+namespace etc
+{
+namespace ssl
+{
+namespace decipher
 {
 
 /*!
@@ -155,5 +159,7 @@ int CipherDoer::DecipherText(const uint8_t* key
     *((*out) + *outLen) = '\0';
 
     return success;
+}
+}
 }
 } /* NAMESPACE etc::ssl::decipher */

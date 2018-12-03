@@ -7,7 +7,9 @@
 #include <cstring>
 #include "key.h"
 
-namespace etc::key
+namespace etc
+{
+namespace key
 {
 
 /*!
@@ -62,5 +64,6 @@ void key::getStringNorm(uint8_t** keyGet)
     memcpy(*keyGet,
            _fullKey,
            16);
+}
 }
 } /* NAMESPACE etc::key */

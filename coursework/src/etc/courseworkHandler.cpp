@@ -131,7 +131,7 @@ void CourseworkHandler::StartOpenMP()
                     _plaintextInitialLength);
         int pr_encL = _encLength;
         omp_unset_lock(&lck);
-
+        std::cout << "ID: " << omp_get_thread_num() << " After Lock." << std::endl;
         while (!finish)
         {
             int plaintextLengthSerial = 0;
@@ -149,6 +149,7 @@ void CourseworkHandler::StartOpenMP()
                                                                    &pr_encT,
                                                                    &plaintextLengthSerial,
                                                                    &pr_encL);
+            std::cout << "ID: " << omp_get_thread_num() << " After decipher" << std::endl;
             // Verify it is a valid decrpytion
             //! @todo tidy up
             if (success)

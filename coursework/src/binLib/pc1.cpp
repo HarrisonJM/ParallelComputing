@@ -10,9 +10,11 @@ int main()
     double startSerial = omp_get_wtime();
     ch.StartSerial();
     double finishSerial = omp_get_wtime();
+
     double startOMP = omp_get_wtime();
     ch.StartOpenMP();
     double finishOMP = omp_get_wtime();
+
     double startMPI = omp_get_wtime();
     ch.StartMPI();
     double finishMPI = omp_get_wtime();

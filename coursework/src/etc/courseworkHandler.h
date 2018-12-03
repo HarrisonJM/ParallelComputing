@@ -31,7 +31,7 @@ public:
     void StartMPI();
 private:
 
-    void _MasterWork(int procNum);
+    bool _MasterWork(int procNum);
     void _WorkerWork();
 
     bool _SolutionCheck(const uint8_t* unencText

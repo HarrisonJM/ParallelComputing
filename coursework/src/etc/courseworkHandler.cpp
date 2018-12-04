@@ -4,7 +4,10 @@
  * @date 07/11/18
  */
 #include <omp.h>
+
+#ifdef _USE_MPI_
 #include <mpi.h>
+#endif /* _USE_MPI_ */
 
 #include <cstdint>
 #include <openssl/rand.h>
@@ -170,7 +173,7 @@ void CourseworkHandler::StartOpenMP()
         delete[] plaintextFinal;
     }
 }
-
+#ifdef _USE_MPI_
 /*!
  * First the masterthread sends data to all the other threads
  *
@@ -206,23 +209,6 @@ void CourseworkHandler::StartMPI()
 
     if (safe)
         MPI::Finalize();
-}
-
-void CourseworkHandler::_printKey(const uint8_t* key
-                                  , const int length)
-{
-    std::cout << "         Key: ";
-    for (int i = 0; i < length; ++i)
-    {
-        if ((i%60) == 0)
-        {
-            std::cout << std::endl;
-        }
-
-        std::cout << std::hex << std::setfill('0') << std::setw(2) << (int) key[i] << " ";
-    }
-
-    std::cout << std::endl;
 }
 /*!
  * Performs the work of the master Thread
@@ -422,6 +408,9 @@ void CourseworkHandler::_WorkerWork()
     delete[] pr_pt;
     delete[] plaintextFinal;
 }
+
+#endif /* _USE_MPI_ */
+
 bool CourseworkHandler::_SolutionCheck(const uint8_t* unencText
                                        , const uint8_t* plainText
                                        , const uint8_t* key
@@ -443,4 +432,27 @@ bool CourseworkHandler::_SolutionCheck(const uint8_t* unencText
 
     return ret;
 }
+
+/*!
+ * @brief prints the key in hex
+ * @param key The key we wish to print
+ * @param length The length of the key
+ */
+void CourseworkHandler::_printKey(const uint8_t* key
+                                  , const int length)
+{
+    std::cout << "         Key: ";
+    for (int i = 0; i < length; ++i)
+    {
+        if ((i%60) == 0)
+        {
+            std::cout << std::endl;
+        }
+
+        std::cout << std::hex << std::setfill('0') << std::setw(2) << (int) key[i] << " ";
+    }
+
+    std::cout << std::endl;
+}
+
 } /* namespace etc */

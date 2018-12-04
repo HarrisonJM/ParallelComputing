@@ -15,15 +15,19 @@ int main()
     ch.StartOpenMP();
     double finishOMP = omp_get_wtime();
 
+#ifdef _USE_MPI_
     double startMPI = omp_get_wtime();
     ch.StartMPI();
     double finishMPI = omp_get_wtime();
+#endif /* _USE_MPI_ */
 
     std::cout <<
-    "Serial Time: " << (finishSerial-startSerial) <<
-    "   OMP Time: " << (finishOMP-startOMP) <<
+              "Serial Time: " << (finishSerial-startSerial) <<
+              "   OMP Time: " << (finishOMP-startOMP) <<
+              #ifdef _USE_MPI_
     "   MPI Time: " << (finishMPI-startMPI) <<
-    std::endl;
+              #endif
+              std::endl;
 
     return 0;
 }

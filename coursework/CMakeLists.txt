@@ -4,6 +4,8 @@ project(ProtocolDeveloper LANGUAGES C CXX VERSION 0.1)
 
 set(CMAKE_CXX_FLAGS "-std=c++17 -lpthread -Wall -fopenmp")
 set(CMAKE_CXX_COMPILER mpic++)
+#set(CMAKE_CXX_COMPILER g++)
+#add_definitions(-D_USE_MPI_)
 
 find_package(OpenSSL REQUIRED)
 if (OPENSSL_FOUND)

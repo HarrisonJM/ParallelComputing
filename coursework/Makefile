@@ -9,10 +9,14 @@ SOURCES := $(shell find $(BUILDROOT) -name "*.cpp")
 OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
 ALLFILES := $(SOURCES)
 
-all: coursework.out
+all: coursework.mpi coursework.omp
 
-coursework.out: $(OBJECTS)
-	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS)
+coursework.mpi: $(OBJECTS)
+	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS) -D_USE_OPEN_MP_
+
+coursework.mpi: $(OBJECTS)
+    	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS) -D_USE_MPI_
+
 #
 #
 #

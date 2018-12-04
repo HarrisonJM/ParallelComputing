@@ -12,7 +12,7 @@ int main()
     double finishSerial = omp_get_wtime();
 
     double startOMP = omp_get_wtime();
-    ch.StartOpenMP();
+//    ch.StartOpenMP();
     double finishOMP = omp_get_wtime();
 
 #ifdef _USE_MPI_

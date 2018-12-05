@@ -331,6 +331,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
+        std::cout << "pr_iv: " << std::hex << pr_iv << std::endl;
 
         // Receive the encrypted Text
         MPI::COMM_WORLD.Recv(pr_encT, // buf
@@ -338,6 +339,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
+        std::cout << "pr_encT: " << std::hex << pr_encT << std::endl;
 
         // Receive the encrypted Text length
         MPI::COMM_WORLD.Recv(&pr_encL, // buf
@@ -345,6 +347,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_INTEGER, // dataType
                              0, //src
                              INITTAG); //tag
+        std::cout << "pr_encL: " << std::hex << &pr_encL << std::endl;
 
         // Receive the initial plaintext
         MPI::COMM_WORLD.Recv(pr_pt, // buf
@@ -352,6 +355,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
+        std::cout << "pr_pt: " << std::hex << pr_encL << std::endl;
 
         // Receive the length of the plaintext
         MPI::COMM_WORLD.Recv(&_plaintextInitialLength, // buf
@@ -374,6 +378,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              0,
                              REQTAG);
         // Get the key
+        std::cout << "solution: " << std::hex << &solution << std::endl;
         MPI::COMM_WORLD.Recv(&solution,
                              AES_128_KEY_SIZE,
                              MPI_UINT8_T,
@@ -381,12 +386,6 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              KEYTAG);
 
         std::cout << "decrypting: " << rankNum << std::endl;
-        std::cout << "solution: " << std::hex << &solution << std::endl;
-        std::cout << "pr_iv: " << std::hex << pr_iv << std::endl;
-        std::cout << "plaintextFinal: " << std::hex << &plaintextFinal << std::endl;
-        std::cout << "pr_encT: " << std::hex << pr_encT << std::endl;
-        std::cout << "pr_encL: " << std::hex << &pr_encL << std::endl;
-
         int plaintextLengthSerial = 0;
         success = etc::ssl::decipher::CipherDoer::DecipherText(solution,
                                                                pr_iv,

@@ -233,7 +233,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
 
     for (int i = 1; i < procNum; ++i)
     {
-        std::cout << "Sending IV to: " << i << std::endl;
         // Send the IV
         MPI::COMM_WORLD.Send(_iv, // buf
                              AES_BLOCK_SIZE*2, // count
@@ -241,7 +240,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
                              i, //dest
                              INITTAG); //tag
 
-        std::cout << "Sending encrypted text to: " << i << std::endl;
         // Send the encrypted Text
         MPI::COMM_WORLD.Send(_encryptedText, // buf
                              8192, // count
@@ -249,7 +247,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
                              i, //dest
                              INITTAG); //tag
 
-        std::cout << "Sending enc length to: " << i << std::endl;
         // Send the encrypted Text length
         MPI::COMM_WORLD.Send(&_encLength, // buf
                              1, // count
@@ -257,7 +254,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
                              i, //dest
                              INITTAG); //tag
 
-        std::cout << "Sending plaintext for comparison to: " << i << std::endl;
         // Send the initial plaintext
         MPI::COMM_WORLD.Send(_plaintextInitial, // buf
                              _plaintextInitialLength, // count
@@ -265,7 +261,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
                              i, //dest
                              INITTAG); //tag
 
-        std::cout << "Sending _plaintextInitialLength to: " << i << std::endl;
         // Send the length of the plaintext
         MPI::COMM_WORLD.Send(&_plaintextInitialLength, // buf
                              1, // count
@@ -372,12 +367,14 @@ void CourseworkHandler::_WorkerWork(int rankNum)
 
     while (!done)
     {
+        std::cout << "requesting key: " << rankNum << std::endl;
         // Send request to master for a key
         MPI::COMM_WORLD.Send(&request,
                              1,
                              MPI_CXX_BOOL,
                              0,
                              REQTAG);
+        std::cout << "getting the key: " << rankNum << std::endl;
         // Get the key
         MPI::COMM_WORLD.Recv(&solution,
                              AES_128_KEY_SIZE,

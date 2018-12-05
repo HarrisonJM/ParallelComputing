@@ -1,22 +1,19 @@
 # src
 This folder contains:
 * The `Makefile`
-* an `OpenMP` directory
-* an `MPI` directory
-* an `etc` directory that will contain utility classes not directly related
-* a `main.c` file that will be used to tie everything together
+* an `etc` directory that will contain the classes used in the project a `main.c` file that will be used to tie everything together
+* a bin Lib directory that contains the main source file.
 
 # building
 To build the project simply run make in this directory
-* Each `openMP` and `MPI` directory will be compiled into a header archive and
-linked against the final executable; which will include main.c
+* The makefile will generate two different executables. Both will run in serial, however one will contain the openMPI threading and the other will have openMP. The time each took to run will be printed at the end.
+
+# running
+There is a script called RUNME.sh. Running this script will take care of all the tasks required to view this project (build and run).
 
 # results
-The results will be printed out as a part of the main running of the program.
-The program can be executed by typing `$ ./cipherCracker.out`. Optionally
-passing an encrypted textfile path into the program will instead decipher that.
+The results will be printed directly to STDOUT. A time for serial and a time for each implementation.
 
 # extras
-Passing a string into `encrypt.sh` will encrypt that string and 
-Output a file that will automatically be picked up by the program for deciphering.
+Passing a string into `encrypt.sh` will encrypt that string.
 

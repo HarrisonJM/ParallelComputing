@@ -175,6 +175,7 @@ void CourseworkHandler::StartOpenMP()
         delete[] plaintextFinal;
     }
 }
+
 #ifdef _USE_MPI_
 /*!
  * First the masterthread sends data to all the other threads
@@ -198,19 +199,24 @@ void CourseworkHandler::StartMPI()
     // _our_ particular ID
     ID = MPI::COMM_WORLD.Get_rank();
 
-    bool safe = true;
+    if (procNum < 2)
+    {
+        std::cout << "Only one processor!" << std::endl;
+        MPI::Finalize();
+        return;
+    }
 
     if (ID == 0)
     {
-        safe = _MasterWork(procNum);
+        std::cout << "MasterNumber is: " << ID << std::endl;
+        _MasterWork(procNum);
     }
     else
     {
         _WorkerWork();
     }
 
-    if (safe)
-        MPI::Finalize();
+    MPI::Finalize();
 }
 /*!
  * Performs the work of the master Thread
@@ -238,7 +244,7 @@ bool CourseworkHandler::_MasterWork(int procNum)
         std::cout << "Sending encrypted text to: " << i << std::endl;
         // Send the encrypted Text
         MPI::COMM_WORLD.Send(_encryptedText, // buf
-                             16384, // count
+                             8192, // count
                              MPI_INTEGER, // dataType
                              i, //dest
                              INITTAG); //tag
@@ -266,7 +272,6 @@ bool CourseworkHandler::_MasterWork(int procNum)
                              MPI_INTEGER, // dataType
                              i, //dest
                              INITTAG); //tag
-
     }
 
     etc::key::key key;
@@ -318,9 +323,9 @@ void CourseworkHandler::_WorkerWork()
     auto solution = new uint8_t[AES_128_KEY_SIZE];
     auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
     auto pr_iv = new uint8_t[AES_BLOCK_SIZE];
-    auto pr_encT = new uint8_t[16384];
-    auto pr_pt = new uint8_t[16384];
-    int pr_encL = 0;
+    auto pr_encT = new uint8_t[8192]; /* Encrypted Text */
+    auto pr_pt = new uint8_t[8192]; /* Plaintext original */
+    int pr_encL = 0; /* Length of the original text */
 
     // receive parameters
     {

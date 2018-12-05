@@ -11,9 +11,11 @@ int main()
     ch.StartSerial();
     double finishSerial = omp_get_wtime();
 
+#ifdef _USE_OPEN_MP_
     double startOMP = omp_get_wtime();
-//    ch.StartOpenMP();
+    ch.StartOpenMP();
     double finishOMP = omp_get_wtime();
+#endif /* _USE_OPEN_MP_ */
 
 #ifdef _USE_MPI_
     double startMPI = omp_get_wtime();
@@ -23,10 +25,12 @@ int main()
 
     std::cout <<
               "Serial Time: " << (finishSerial-startSerial) <<
+              #ifdef _USE_OPEN_MP_
               "   OMP Time: " << (finishOMP-startOMP) <<
+              #endif /* _USE_OPEN_MP_ */
               #ifdef _USE_MPI_
-    "   MPI Time: " << (finishMPI-startMPI) <<
-              #endif
+              "   MPI Time: " << (finishMPI-startMPI) <<
+              #endif /* _USE_MPI_ */
               std::endl;
 
     return 0;

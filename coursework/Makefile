@@ -1,4 +1,5 @@
-CXX := mpic++
+CXX := g++
+MPICXX := mpic++
 CXX_FLAGS := -g -fopenmp -std=c++14 -lpthread -Wall
 LD_LIBS := -lcrypto
 
@@ -10,28 +11,13 @@ OBJECTS := $(patsubst %.c, %.o, $(SOURCES))
 ALLFILES := $(SOURCES)
 
 all: coursework.mpi coursework.omp
+	[ -d bin ] || mkdir bin
+	mv src/coursework.* bin/
 
-coursework.mpi: $(OBJECTS)
+coursework.omp: $(OBJECTS)
 	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS) -D_USE_OPEN_MP_
 
 coursework.mpi: $(OBJECTS)
-    	$(CXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS) -D_USE_MPI_
+	$(MPICXX) $(CXX_FLAGS) $(CXX_INCLUDE) $^ -o $(BUILDROOT)/$@ $(LD_LIBS) -D_USE_MPI_
 
-#
-#
-#
-#coursework.out: cipherDoer.o key.o courseworkHandler.o
-#	$(CXX) cipherDoer.o key.o courseworkHandler.o
-#
-#pc1.o: $(BUILDROOT)/src/etc/binLib/pc1.pp
-#
-#cipherDoer.o: $(BUILDROOT)/src/etc/ssl/cipherDoer.cpp
-#	$(CXX) $(CXX_FLAGS) -I$(CXX_INCLUDE) -c $(BUILDROOT)/etc/ssl/cipherDoer.cpp
-#
-#key.o: $(BUILDROOT)/src/etc/ssl/key.cpp
-#	$(CXX) $(CXX_FLAGS) -I$(CXX_INCLUDE) -c $(BUILDROOT)/etc/key/key.cpp
-#
-#courseworkHandler.o: $(BUILDROOT)/src/etc/ssl/courseworkHandler.cpp
-#	$(CXX) $(CXX_FLAGS) -I$(CXX_INCLUDE) -c $(BUILDROOT)/etc/courseworkHandler.cpp
-
-.PHONY: all
+.PHONY: all clean

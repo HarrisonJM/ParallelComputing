@@ -11,7 +11,6 @@ namespace etc
 {
 namespace key
 {
-
 /*!
  * @brief Constructor
  */

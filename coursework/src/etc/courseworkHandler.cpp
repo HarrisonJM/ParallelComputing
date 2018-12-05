@@ -381,6 +381,12 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              KEYTAG);
 
         std::cout << "decrypting: " << rankNum << std::endl;
+        std::cout << "solution: " << std::hex << &solution << std::endl;
+        std::cout << "pr_iv: " << std::hex << pr_iv << std::endl;
+        std::cout << "plaintextFinal: " << std::hex << &plaintextFinal << std::endl;
+        std::cout << "pr_encT: " << std::hex << pr_encT << std::endl;
+        std::cout << "pr_encL: " << std::hex << &pr_encL << std::endl;
+
         int plaintextLengthSerial = 0;
         success = etc::ssl::decipher::CipherDoer::DecipherText(solution,
                                                                pr_iv,

@@ -237,7 +237,7 @@ bool CourseworkHandler::_MasterWork(int procNum)
         // Send the IV
         MPI::COMM_WORLD.Send(_iv, // buf
                              AES_BLOCK_SIZE*2, // count
-                             MPI_INTEGER, // dataType
+                             MPI_UINT8_T, // dataType
                              i, //dest
                              INITTAG); //tag
 
@@ -245,7 +245,7 @@ bool CourseworkHandler::_MasterWork(int procNum)
         // Send the encrypted Text
         MPI::COMM_WORLD.Send(_encryptedText, // buf
                              8192, // count
-                             MPI_INTEGER, // dataType
+                             MPI_UINT8_T, // dataType
                              i, //dest
                              INITTAG); //tag
 
@@ -261,7 +261,7 @@ bool CourseworkHandler::_MasterWork(int procNum)
         // Send the initial plaintext
         MPI::COMM_WORLD.Send(_plaintextInitial, // buf
                              _plaintextInitialLength, // count
-                             MPI_INTEGER, // dataType
+                             MPI_UINT8_T, // dataType
                              i, //dest
                              INITTAG); //tag
 

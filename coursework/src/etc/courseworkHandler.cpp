@@ -330,7 +330,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
-        std::cout << "pr_iv: " << rankNum << " " << std::hex << pr_iv << std::endl;
+        std::cout << "pr_iv: " << rankNum << " " << std::hex << static_cast<void*>(pr_iv) << std::endl;
 
         // Receive the encrypted Text
         MPI::COMM_WORLD.Recv(pr_encT, // buf
@@ -338,7 +338,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
-        std::cout << "pr_encT: " << rankNum << " " << std::hex << pr_encT << std::endl;
+        std::cout << "pr_encT: " << rankNum << " " << std::hex << static_cast<void*>(pr_encT) << std::endl;
 
         // Receive the encrypted Text length
         MPI::COMM_WORLD.Recv(&pr_encL, // buf
@@ -354,7 +354,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              MPI_UINT8_T, // dataType
                              0, //src
                              INITTAG); //tag
-        std::cout << "pr_pt: " << rankNum << " " << std::hex << pr_encL << std::endl;
+        std::cout << "pr_pt: " << rankNum << " " << std::hex << &pr_encL << std::endl;
 
         // Receive the length of the plaintext
         MPI::COMM_WORLD.Recv(&_plaintextInitialLength, // buf
@@ -402,7 +402,6 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                                   solution,
                                   "MPI");
         }
-
         // Gather completion from all threads
         MPI::COMM_WORLD.Allreduce(&done,
                                   &done,

@@ -213,7 +213,7 @@ void CourseworkHandler::StartMPI()
     }
     else
     {
-        _WorkerWork(0);
+        _WorkerWork(ID);
     }
 
     MPI::Finalize();

@@ -7,9 +7,11 @@ int main()
 {
     etc::CourseworkHandler ch;
 
+#ifndef _USE_MPI_
     double startSerial = omp_get_wtime();
     ch.StartSerial();
     double finishSerial = omp_get_wtime();
+#endif /* _USE_MPI_ */
 
 #ifdef _USE_OPEN_MP_
     double startOMP = omp_get_wtime();
@@ -24,7 +26,9 @@ int main()
 #endif /* _USE_MPI_ */
 
     std::cout <<
+              #ifndef _USE_MPI_
               "Serial Time: " << (finishSerial-startSerial) <<
+              #endif /*  _USE_MPI_ */
               #ifdef _USE_OPEN_MP_
               "   OMP Time: " << (finishOMP-startOMP) <<
               #endif /* _USE_OPEN_MP_ */

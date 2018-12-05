@@ -367,14 +367,12 @@ void CourseworkHandler::_WorkerWork(int rankNum)
 
     while (!done)
     {
-        std::cout << "requesting key: " << rankNum << std::endl;
         // Send request to master for a key
         MPI::COMM_WORLD.Send(&request,
                              1,
                              MPI_CXX_BOOL,
                              0,
                              REQTAG);
-        std::cout << "getting the key: " << rankNum << std::endl;
         // Get the key
         MPI::COMM_WORLD.Recv(&solution,
                              AES_128_KEY_SIZE,
@@ -382,6 +380,7 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                              0,
                              KEYTAG);
 
+        std::cout << "decrypting: " << rankNum << std::endl;
         int plaintextLengthSerial = 0;
         success = etc::ssl::decipher::CipherDoer::DecipherText(solution,
                                                                pr_iv,
@@ -389,9 +388,9 @@ void CourseworkHandler::_WorkerWork(int rankNum)
                                                                &pr_encT,
                                                                &plaintextLengthSerial,
                                                                &pr_encL);
+        std::cout << "done decrypting: " << rankNum << std::endl;
 
         // Verify it is a valid decrpytion
-        //! @todo tidy up
         if (success)
         {
             done = _SolutionCheck(plaintextFinal,

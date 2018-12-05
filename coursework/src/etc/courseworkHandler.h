@@ -32,7 +32,7 @@ public:
 private:
 
     bool _MasterWork(int procNum);
-    void _WorkerWork();
+    void _WorkerWork(int rankNum);
 
     bool _SolutionCheck(const uint8_t* unencText
                         , const uint8_t* plainText

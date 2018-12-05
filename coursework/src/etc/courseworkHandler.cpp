@@ -213,7 +213,7 @@ void CourseworkHandler::StartMPI()
     }
     else
     {
-        _WorkerWork();
+        _WorkerWork(0);
     }
 
     MPI::Finalize();
@@ -318,7 +318,7 @@ bool CourseworkHandler::_MasterWork(int procNum)
 /*!
  * Performs the work of the worker thread
  */
-void CourseworkHandler::_WorkerWork()
+void CourseworkHandler::_WorkerWork(int rankNum)
 {
     auto solution = new uint8_t[AES_128_KEY_SIZE];
     auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
@@ -330,6 +330,7 @@ void CourseworkHandler::_WorkerWork()
     // receive parameters
     {
         // Receive the IV
+        std::cout << "workerRank: " << rankNum << std::endl;
         MPI::COMM_WORLD.Recv(pr_iv, // buf
                              AES_BLOCK_SIZE*2, // count
                              MPI_UINT8_T, // dataType

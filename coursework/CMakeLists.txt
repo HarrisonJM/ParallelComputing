@@ -3,9 +3,10 @@ cmake_minimum_required(VERSION 3.9.6)
 project(ProtocolDeveloper LANGUAGES C CXX VERSION 0.1)
 
 set(CMAKE_CXX_FLAGS "-std=c++17 -lpthread -Wall -fopenmp")
-set(CMAKE_CXX_COMPILER mpic++)
-#set(CMAKE_CXX_COMPILER g++)
-add_definitions(-D_USE_MPI_)
+#set(CMAKE_CXX_COMPILER mpic++)
+set(CMAKE_CXX_COMPILER g++)
+#add_definitions(-D_USE_MPI_)
+add_definitions(-D_USE_OPEN_MP_)
 
 find_package(OpenSSL REQUIRED)
 if (OPENSSL_FOUND)
@@ -34,8 +35,8 @@ target_link_libraries(courseworkHandler
         key
         OpenSSL::SSL)
 
-add_executable(coursework.omp
+add_executable(coursework.out
         src/binLib/pc1.cpp)
 
-target_link_libraries(coursework.omp
+target_link_libraries(coursework.out
         courseworkHandler)

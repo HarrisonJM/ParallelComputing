@@ -111,17 +111,13 @@ void CourseworkHandler::StartOpenMP()
     omp_lock_t lck;
     omp_init_lock(&lck);
 
-        std::cout << " Before OMP." << std::endl;
-#pragma omp parallel num_threads(20) shared(finish, key) private(success)
+#pragma omp parallel num_threads(16) shared(finish, key) private(success)
     {
-        std::cout << " Before thingy." << std::endl;
         auto solution = new uint8_t[AES_128_KEY_SIZE];
         auto plaintextFinal = new uint8_t[AES_BLOCK_SIZE*2];
         auto pr_iv = new uint8_t[AES_BLOCK_SIZE];
         auto pr_encT = new uint8_t[16384];
         auto pr_pt = new uint8_t[16384];
-
-        std::cout << " After thingy." << std::endl;
 
         // Create thread specific personal copies
         omp_set_lock(&lck);
@@ -136,7 +132,6 @@ void CourseworkHandler::StartOpenMP()
                     _plaintextInitialLength);
         int pr_encL = _encLength;
         omp_unset_lock(&lck);
-        std::cout << "ID: " << omp_get_thread_num() << " After Lock." << std::endl;
         while (!finish)
         {
             int plaintextLengthSerial = 0;
@@ -154,9 +149,7 @@ void CourseworkHandler::StartOpenMP()
                                                                    &pr_encT,
                                                                    &plaintextLengthSerial,
                                                                    &pr_encL);
-            std::cout << "ID: " << omp_get_thread_num() << " After decipher" << std::endl;
             // Verify it is a valid decrpytion
-            //! @todo tidy up
             if (success)
             {
                 omp_set_lock(&lck);
